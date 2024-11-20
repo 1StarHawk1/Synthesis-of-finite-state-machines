@@ -63,6 +63,7 @@ def main():
     #regex = '<x><a>'
     #regex = '<x|a>x'
     A = ['x', 'b', 'd', 'm', 'a']
+    #A = ['x', 'a']
     markup = [[] for _ in range(len(regex)+1)]
     pre_primary_places = []
     #print(markup)
@@ -95,12 +96,12 @@ def main():
                         flag = True
                         # if markup[p+1] not in conditions:
                         #     conditions.append(markup[p+1])
-                if not flag:
-                    table[a].append(None)
-                else:
-                    table[a].append(adding)
-                    if adding not in conditions:
-                        conditions.append(adding)
+            if not flag:
+                table[a].append(None)
+            else:
+                table[a].append(adding)
+                if adding not in conditions:
+                    conditions.append(adding)
         i+=1
     print(table)
     #print(conditions)
@@ -108,11 +109,14 @@ def main():
     #print(exit_simbols)
     is_condition_in_regex = []
     for i in range(len(conditions)):
+        help = False
         for c in conditions[i]:
             if c in exit_simbols:
-                is_condition_in_regex.append(1)
-            else:
-                is_condition_in_regex.append(0)
+                help = True
+        if help:
+            is_condition_in_regex.append(1)
+        else:
+            is_condition_in_regex.append(0)
     print(is_condition_in_regex)
 
     array_table = list(table.values())
