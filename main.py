@@ -1,3 +1,28 @@
+import sys
+
+
+def read_alphabet(regex):
+    alphabet = []
+    for i in range(len(regex)):
+        if regex[i] not in alphabet and regex[i] not in ['(', ')', '|', '<', '>']:
+            alphabet.append(regex[i])
+    return alphabet
+
+
+def print_output(output_matrix, conditions):
+    with open('output.txt', 'w', encoding='utf-8') as f:
+        original_stdout = sys.stdout
+        sys.stdout = f
+
+        print('   ','  '.join(['q'+str(i+1) for i in range(0, len(conditions))]))
+        for i in range(len(conditions)):
+            print('q'+str(i+1), end=' ')
+            for j in range(len(conditions)):
+                print(output_matrix[i][j], end=' ')
+            print()
+        sys.stdout = original_stdout
+
+
 def subordination_rules(regex, markup, A):
     subordination_dependencies = [[] for _ in range(len(regex)+1)]
     for i in range(len(regex)):
@@ -53,16 +78,19 @@ def subordination_rules(regex, markup, A):
             if i in subordination_dependencies[j]:
                 markup[j].extend(x for x in markup[i] if x not in markup[j])
     #print(subordination_dependencies)
-    print(markup)
+    #print(markup)
     return markup
 
 
 def main():
-    #regex = '<x|a>a'
-    regex = '<x|<b|d>>m<a>(b|d)'
+    #regex = '<x|<b|d>>m<a>(b|d)'
+    with open('input_regex.txt', 'r', encoding='utf-8') as f:
+        regex = f.readline()
+    # regex = '<x|a>a'
     #regex = '<x><a>'
     #regex = '<x|a>x'
-    A = ['x', 'b', 'd', 'm', 'a']
+    A = read_alphabet(regex)
+   # print(A)
     #A = ['x', 'a']
     markup = [[] for _ in range(len(regex)+1)]
     pre_primary_places = []
@@ -117,13 +145,13 @@ def main():
             is_condition_in_regex.append(1)
         else:
             is_condition_in_regex.append(0)
-    print(is_condition_in_regex)
+    #print(is_condition_in_regex)
 
     array_table = list(table.values())
 
     output_matrix = [['   ' for _ in range(len(conditions))] for _ in range(len(conditions))]
-    print(table)
-    print(array_table)
+    #print(table)
+    #print(array_table)
 
     keys_list = list(table.keys())
     for key in keys_list:
@@ -138,9 +166,12 @@ def main():
             output_matrix[i][index] = key + '/' + str(is_condition_in_regex[index])
 
 
-    # Выводим результат
     for row in output_matrix:
         print(row)
+
+
+    print_output(output_matrix, conditions)
+
 
 
 
